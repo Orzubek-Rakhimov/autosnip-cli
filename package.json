@@ -1,12 +1,19 @@
 {
   "name": "react-snippet-cli",
   "version": "0.0.1",
-  "main": "index.js",
+  "bin": {
+    "rts": "./dist/index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc -w",
+    "link-cli": "npm unlink react-snippet-cli && npm link"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "A CLI to generate React snippets automatically"
+  "description": "A CLI to generate React snippets automatically",
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "typescript": "^5.6.2"
+  }
 }
