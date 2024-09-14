@@ -1,6 +1,6 @@
 {
   "name": "autosnip-cli",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "main": "./dist/bin.js",
   "bin": {
     "autosnip": "./dist/bin.js"
@@ -10,6 +10,7 @@
     "README.md",
     "LICENSE"
   ],
+  "readme": "README.md",
   "scripts": {
     "dev": "tsc -w",
     "build": "esbuild src/bin.ts --bundle --platform=node --outfile=dist/bin.js --packages=external",
@@ -22,8 +23,8 @@
     "react-snippet-cli",
     "react-snippet-cli-ts"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Orzubek Rakhimov",
+  "license": "MIT",
   "description": "A CLI to generate React snippets automatically",
   "devDependencies": {
     "@changesets/cli": "^2.27.8",
