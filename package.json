@@ -1,6 +1,6 @@
 {
   "name": "autosnip-cli",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "./dist/bin.js",
   "bin": {
     "autosnip": "./dist/bin.js"
@@ -36,5 +36,13 @@
     "chalk": "^4.1.2",
     "chokidar": "^4.0.0",
     "commander": "^12.1.0"
+  },
+  "homepage": "https://github.com/Orzubek-Rakhimov/autosnip-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Orzubek-Rakhimov/autosnip-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Orzubek-Rakhimov/autosnip-cli/issues"
   }
 }

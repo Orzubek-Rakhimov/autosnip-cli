@@ -1,5 +1,11 @@
 # autosnip-cli
 
+## 0.1.4
+
+### Patch Changes
+
+- package.json updated
+
 ## 0.1.3
 
 ### Patch Changes
