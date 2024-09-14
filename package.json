@@ -5,6 +5,11 @@
   "bin": {
     "autosnip": "./dist/bin.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "tsc -w",
     "build": "esbuild src/bin.ts --bundle --platform=node --outfile=dist/bin.js --packages=external",
