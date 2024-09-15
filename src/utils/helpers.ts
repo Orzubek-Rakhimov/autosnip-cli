@@ -3,6 +3,7 @@ import { loadTemplate, readFile } from "./file";
 import { DefaultSnippets, ProjectType } from "../constants/index";
 import path from "path";
 import Logger from "./logger";
+import { ParsedTemplates } from "../parsedTemplates";
 
 /**
  * Reads and parses the package.json file.
@@ -65,16 +66,16 @@ export const getDefaultSnippet = async (component: string): Promise<string> => {
     const isTypescript = ext === '.tsx';
 
     if (projectType === ProjectType.NEXT && name === 'layout') {
-        return isTypescript ? DefaultSnippets.TXL : DefaultSnippets.JXL;
+        return isTypescript ? ParsedTemplates.TXL : ParsedTemplates.JXL;
     }
 
     const snippetMap = {
-        [ProjectType.REACT]: isTypescript ? DefaultSnippets.TRAFC : DefaultSnippets.JRAFC,
-        [ProjectType.REACT_NATIVE]: isTypescript ? DefaultSnippets.TNAFC : DefaultSnippets.JNAFC,
-        [ProjectType.NEXT]: isTypescript ? DefaultSnippets.TRAFC : DefaultSnippets.JRAFC,
+        [ProjectType.REACT]: isTypescript ? ParsedTemplates.TRAFC : ParsedTemplates.JRAFC,
+        [ProjectType.REACT_NATIVE]: isTypescript ? ParsedTemplates.TNAFC : ParsedTemplates.JNAFC,
+        [ProjectType.NEXT]: isTypescript ? ParsedTemplates.TRAFC : ParsedTemplates.JRAFC,
     };
 
-    return snippetMap[projectType as keyof typeof snippetMap] || (isTypescript ? DefaultSnippets.TRAFC : DefaultSnippets.JRAFC);
+    return snippetMap[projectType as keyof typeof snippetMap] || (isTypescript ? ParsedTemplates.TRAFC : ParsedTemplates.JRAFC);
 };
 
 /**
@@ -144,8 +145,8 @@ export const compile = (template: string, data: { name: string }): string =>
  */
 export const getTemplateContent = async (template: string | undefined): Promise<string | ((component: string) => Promise<string>)> => {
     try {
-        if (!template) return async (component: string) => await loadTemplate(path.resolve('src', 'snippets', await getDefaultSnippet(component)));
-        if (DefaultSnippets[template.toUpperCase() as keyof typeof DefaultSnippets]) return await loadTemplate(path.resolve('src', 'snippets', DefaultSnippets[template.toUpperCase() as keyof typeof DefaultSnippets]));
+        if (!template) return async (component: string) => await getDefaultSnippet(component);
+        if (ParsedTemplates[template.toUpperCase() as keyof typeof ParsedTemplates]) return ParsedTemplates[template.toUpperCase() as keyof typeof ParsedTemplates];
         return await loadTemplate(template);
     } catch (error) {
         Logger.errorAndExit(error, `Error loading template ${template}`);

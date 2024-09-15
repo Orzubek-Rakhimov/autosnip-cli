@@ -1,5 +1,11 @@
 # autosnip-cli
 
+## 0.1.5
+
+### Patch Changes
+
+- bug fixes
+
 ## 0.1.4
 
 ### Patch Changes
