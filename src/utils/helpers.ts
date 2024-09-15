@@ -85,7 +85,7 @@ export const getDefaultSnippet = async (component: string): Promise<string> => {
  */
 export const toCamelCase = (input: string): string =>
     input.split(/[^a-zA-Z0-9]/)
-        .map((word, index) => index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .map((word, index) => index === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join('');
 
 /**
