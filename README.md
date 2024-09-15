@@ -15,6 +15,8 @@ Are you tired of manually creating React snippets and managing index files? Look
 
 ## Installation
 
+### if you prefer it as a global package
+
 ```bash
 npm install -g autosnip-cli
 ```
@@ -25,7 +27,22 @@ or
 yarn global add autosnip-cli
 ```
 
+### if you prefer it as a local package
+
+```bash
+npm install --save-dev autosnip-cli
+```
+
+or 
+
+```bash
+yarn add --dev autosnip-cli
+```
+
 ## Usage
+
+
+### if you prefer it as a global package
 
 ```bash
 autosnip [options]
