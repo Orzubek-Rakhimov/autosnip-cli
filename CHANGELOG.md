@@ -1,5 +1,11 @@
 # autosnip-cli
 
+## 0.1.9
+
+### Patch Changes
+
+- updated readme file and aded custom template use case example
+
 ## 0.1.8
 
 ### Patch Changes

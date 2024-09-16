@@ -1,6 +1,6 @@
 {
   "name": "autosnip-cli",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "./dist/bin.js",
   "bin": {
     "autosnip": "./dist/bin.js"

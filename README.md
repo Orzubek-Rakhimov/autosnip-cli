@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
+[![Version](https://img.shields.io/badge/version-0.1.9-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
 
 Are you tired of manually creating React snippets and managing index files? Look no further! AutoSnip CLI is here to save you time and effort. AutoSnip CLI is a powerful tool for automatically creating React , React Native and Next.js snippets and managing index files in your project.
 
@@ -15,19 +15,19 @@ Are you tired of manually creating React snippets and managing index files? Look
 
 ## Installation
 
-### if you prefer it as a global package
+### if you prefer it as a global package 
 
 ```bash
 npm install -g autosnip-cli
 ```
 
-or 
+or
 
 ```bash
 yarn global add autosnip-cli
 ```
 
-### if you prefer it as a local package
+### if you prefer it as a local package 
 
 ```bash
 npm install --save-dev autosnip-cli
@@ -40,7 +40,6 @@ yarn add --dev autosnip-cli
 ```
 
 ## Usage
-
 
 ### if you prefer it as a global package
 
@@ -72,11 +71,40 @@ autosnip [options]
 - JNFC: Javascript React Native Functional Component
 - JXL: Javascript Next.js Layout
 
-
 ### Examples
+
+#### **Using default snippet:**
 
 ```bash
 autosnip-cli -d ./src -t TRAFC -w -i notindex.ts --snippet-depth 1 --index-depth 1
+```
+
+#### **Using custom snippet and file type must be .tmpl:**
+
+```tsx
+import React from 'react';
+import {{ name }} from './{{ name }}.module.css';
+
+interface {{ name }}Props {}
+
+
+const {{ name }} = ({}: {{ name }}Props) => {
+  return <div>This is a custom snippet and file name is {{ name }}</div>;
+};
+
+export default {{ name }};
+```
+
+This custom snippet takes the `name` parameter, which is derived from the file's name, and uses it to generate both the component name and the filename for the CSS module:
+
+```bash
+autosnip-cli -d ./src -t ./path/to/your/template.tmpl -w -i notindex.ts --snippet-depth 1 --index-depth 1
+```
+
+#### **Multiple directories with multiple depths:**
+
+```bash
+autosnip-cli -d ./src ./components -t TRAFC -w -i notindex.ts --snippet-depth 1 2 --index-depth 1 2
 ```
 
 ## Contributing
