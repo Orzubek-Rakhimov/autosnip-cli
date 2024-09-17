@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.9-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
+[![Version](https://img.shields.io/badge/version-0.1.11-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
 
 Are you tired of manually creating React snippets and managing index files? Look no further! AutoSnip CLI is here to save you time and effort. AutoSnip CLI is a powerful tool for automatically creating React , React Native and Next.js snippets and managing index files in your project.
 

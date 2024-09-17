@@ -7,6 +7,7 @@ import { removeFromIndexFile, updateIndexFile } from "./utils";
 import { validateDirectory } from "./utils/file";
 import Logger from "./utils/logger";
 import { DEFAULT_INDEX_DEPTH, DEFAULT_SNIPPET_DEPTH } from "./constants/index";
+import { DirDepthPair } from "./types";
 
 export const knownFiles = new Set<string>();
 
@@ -16,8 +17,16 @@ export const main = async () => {
     const templateContent = await getTemplateContent(options.template);
 
     const watchDirectory = (dirs: { dir: string; snippetDepth: number; indexDepth: number }[], once = false) => {
-        dirs.forEach(({ dir, snippetDepth, indexDepth }) => {
-            const watchRef = watch(dir, { ignoreInitial: false, depth: snippetDepth - 1 });
+        dirs.forEach(({ dir, snippetDepth, indexDepth }, index) => {
+            const excludeDirs = dirs.slice(index + 1).map(d => path.normalize(d.dir));
+            const watchRef = watch(dir, {
+                ignoreInitial: false,
+                depth: snippetDepth - 1,
+                ignored: (filePath) => {
+                    const normalizedFilePath = path.normalize(filePath);
+                    return excludeDirs.some(excludeDir => normalizedFilePath.startsWith(excludeDir));
+                }
+            });
 
             const handleFile = async (filePath: string, isAdd: boolean) => {
                 if (filePath.endsWith('.tsx') || filePath.endsWith('.jsx')) {
@@ -48,11 +57,15 @@ export const main = async () => {
         });
     };
 
-    const dirDepthPairs = options.directory.map((dir: string, index: number) => ({
-        dir: path.resolve(dir),
-        snippetDepth: options.snippetDepth?.[index] ?? DEFAULT_SNIPPET_DEPTH,
-        indexDepth: options.indexDepth?.[index] ?? DEFAULT_INDEX_DEPTH,
-    }));
+
+    const dirDepthPairs = options.directory
+        .map((dir: string, index: number) => ({
+            dir: path.resolve(dir),
+            snippetDepth: options.snippetDepth?.[index] ?? DEFAULT_SNIPPET_DEPTH,
+            indexDepth: options.indexDepth?.[index] ?? DEFAULT_INDEX_DEPTH,
+        }))
+        .sort((a: DirDepthPair, b: DirDepthPair) => a.dir.length - b.dir.length);
+
 
     await Promise.all(dirDepthPairs.map(({ dir }: { dir: string }) => validateDirectory(dir)));
 

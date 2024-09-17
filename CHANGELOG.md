@@ -1,5 +1,11 @@
 # autosnip-cli
 
+## 0.1.11
+
+### Patch Changes
+
+- bug fix:directories dont watch their subdirs if those dirs are specificed seperately
+
 ## 0.1.10
 
 ### Patch Changes
