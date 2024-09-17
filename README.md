@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
+[![Version](https://img.shields.io/badge/version-0.2.1-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
 
 Are you tired of manually creating React snippets and managing index files? Look no further! AutoSnip CLI is here to save you time and effort. AutoSnip CLI is a powerful tool for automatically creating React , React Native and Next.js snippets and managing index files in your project.
 
@@ -12,6 +12,8 @@ Are you tired of manually creating React snippets and managing index files? Look
 - Automatically update index files
 - Customizable snippet templates
 - Configurable directory depths for snippet and index file creation
+- Creates style file when snippet is added with different file extensions (css, scss,   sass, less, stylus) optionally prefixed with "module-" for CSS modules (e.g., "module-scss")
+- Allow to remove associated style file when component file is deleted
 
 ## Installation
 
@@ -63,7 +65,7 @@ npx autosnip [options]
 - `-i, --index <indexFile>`: Create a specified index file for default exports
 - `--snippet-depth <depth...>`: Depth to create snippets
 - `--index-depth <depth...>`: Depth to create index files
-- `-s, --style [type]`: Create a style file with the snippet. [type] can be "css", "scss", "sass", "less", "stylus", optionally prefixed with "module-" for CSS modules (e.g., "module-scss")
+- `-s, --style [type]`: Create a style file with the snippet. `[type]` can be "css", "scss", "sass", "less", "stylus", optionally prefixed with "module-" for CSS modules (e.g., "module-scss")
 - `--remove-style`: Remove the associated style file when the component file is deleted
 - `-h, --help`: Display help for command
 
