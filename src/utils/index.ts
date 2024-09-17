@@ -1,5 +1,4 @@
 import path from 'path';
-import chalk from 'chalk';
 import { appendToFile, readFile, createFile, fileExists, writeFile, removeFile } from './file';
 import { toCamelCase } from './helpers';
 import { knownFiles } from '../main';

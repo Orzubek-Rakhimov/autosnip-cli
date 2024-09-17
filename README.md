@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.11-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
+[![Version](https://img.shields.io/badge/version-0.2.0-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
 
 Are you tired of manually creating React snippets and managing index files? Look no further! AutoSnip CLI is here to save you time and effort. AutoSnip CLI is a powerful tool for automatically creating React , React Native and Next.js snippets and managing index files in your project.
 
@@ -46,6 +46,13 @@ yarn add --dev autosnip-cli
 ```bash
 autosnip [options]
 ```
+or
+
+### if you prefer it as a local package
+
+```bash
+npx autosnip [options]
+```
 
 ## Options
 
@@ -56,7 +63,10 @@ autosnip [options]
 - `-i, --index <indexFile>`: Create a specified index file for default exports
 - `--snippet-depth <depth...>`: Depth to create snippets
 - `--index-depth <depth...>`: Depth to create index files
+- `-s, --style [type]`: Create a style file with the snippet. [type] can be "css", "scss", "sass", "less", "stylus", optionally prefixed with "module-" for CSS modules (e.g., "module-scss")
+- `--remove-style`: Remove the associated style file when the component file is deleted
 - `-h, --help`: Display help for command
+
 
 ## Available Templates
 
@@ -105,6 +115,20 @@ autosnip-cli -d ./src -t ./path/to/your/template.tmpl -w -i notindex.ts --snippe
 
 ```bash
 autosnip-cli -d ./src ./components -t TRAFC -w -i notindex.ts --snippet-depth 1 2 --index-depth 1 2
+```
+## **New features**
+
+#### **Creates style file when snippet is added with -s [type] option**
+
+```bash
+autosnip-cli -d ./src -t TRAFC -w -i notindex.ts --snippet-depth 1 --index-depth 1 -s module-scss
+```
+This command will create a style file `{{ name }}.module.scss` when the snippet is added and automatically import it in the snippet
+
+#### **Allow to remove associated style file when component file is deleted with --remove-style option**
+
+```bash
+autosnip-cli -d ./src -t TRAFC -w -i notindex.ts --snippet-depth 1 --index-depth 1 -s module-scss --remove-style
 ```
 
 ## Contributing

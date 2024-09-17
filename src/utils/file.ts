@@ -64,6 +64,34 @@ export const isDirectory = async (dirPath: string): Promise<boolean> => {
 }
 
 /**
+ * Check if a path is a file.
+ * @param {string} filePath - The path to check.
+ * @returns {Promise<boolean>} True if the path is a file, false otherwise.
+ */
+export const isFile = async (filePath: string): Promise<boolean> => {
+    try {
+        const stats = await fs.stat(filePath);
+        return stats.isFile();
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Check if a file is empty.
+ * @param {string} filePath - The path to check.
+ * @returns {Promise<boolean>} True if the file is empty, false otherwise.
+ */
+export const isFileEmpty = async (filePath: string): Promise<boolean> => {
+    try {
+        const stats = await fs.stat(filePath);
+        return stats.size === 0;
+    } catch {
+        return false;
+    }
+}
+
+/**
  * Create a new file with content.
  * @param {string} filePath - The path where the file should be created.
  * @param {string} content - The content to write to the file.
@@ -85,6 +113,10 @@ export const createFile = async (filePath: string, content: string): Promise<voi
  */
 export const readFile = async (filePath: string): Promise<string> => {
     try {
+        if (!(await isFile(filePath))) {
+            Logger.error(`${filePath} is a directory, not a file`);
+            process.exit(1);
+        }
         return await fs.readFile(filePath, 'utf-8');
     } catch (error) {
         Logger.errorAndExit(error, `Failed to read file ${filePath}`);

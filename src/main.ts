@@ -4,10 +4,11 @@ import { watch } from "chokidar";
 import { getIndexFileName, getTemplateContent } from "./utils/helpers";
 import { createSnippet } from "./utils/snippet";
 import { removeFromIndexFile, updateIndexFile } from "./utils";
-import { validateDirectory } from "./utils/file";
+import { isFileEmpty, validateDirectory } from "./utils/file";
 import Logger from "./utils/logger";
 import { DEFAULT_INDEX_DEPTH, DEFAULT_SNIPPET_DEPTH } from "./constants/index";
-import { DirDepthPair } from "./types";
+import { DirDepthPair, SupportedStylesExtensions } from "./types";
+import { getStylePath, getSytyleExt, proccessCreateStyleFile, proccessRemoveStyleFile } from "./utils/style";
 
 export const knownFiles = new Set<string>();
 
@@ -15,6 +16,7 @@ export const main = async () => {
     const options = program.opts();
     const indexFileName = await getIndexFileName(options.index);
     const templateContent = await getTemplateContent(options.template);
+    const styleExt: SupportedStylesExtensions | undefined = options.style ? getSytyleExt(options.style) : undefined;
 
     const watchDirectory = (dirs: { dir: string; snippetDepth: number; indexDepth: number }[], once = false) => {
         dirs.forEach(({ dir, snippetDepth, indexDepth }, index) => {
@@ -25,16 +27,18 @@ export const main = async () => {
                 ignored: (filePath) => {
                     const normalizedFilePath = path.normalize(filePath);
                     return excludeDirs.some(excludeDir => normalizedFilePath.startsWith(excludeDir));
-                }
+                },
             });
 
             const handleFile = async (filePath: string, isAdd: boolean) => {
                 if (filePath.endsWith('.tsx') || filePath.endsWith('.jsx')) {
                     if (isAdd) {
                         const component = path.basename(filePath);
-                        const content = typeof templateContent === 'function' ? await templateContent(component) : templateContent;
+                        let content = typeof templateContent === 'function' ? await templateContent(component) : templateContent;
+                        if (options.style && (await isFileEmpty(filePath))) {
+                            content = await proccessCreateStyleFile(filePath, styleExt as SupportedStylesExtensions, content);
+                        }
                         await createSnippet(filePath, content);
-                        knownFiles.add(filePath);
                         if (indexDepth > 0) {
                             await updateIndexFile(filePath, indexFileName, indexDepth, dir);
                         }
@@ -42,9 +46,13 @@ export const main = async () => {
                         if (knownFiles.has(filePath)) {
                             await removeFromIndexFile(filePath, indexFileName);
                             knownFiles.delete(filePath);
+                            const stylePath = getStylePath(filePath, styleExt as SupportedStylesExtensions);
+                            if (options.removeStyle && options.style && knownFiles.has(stylePath)) {
+                                await proccessRemoveStyleFile(stylePath);
+                            }
                         }
                     }
-                }
+                };
             };
 
             watchRef
@@ -54,6 +62,7 @@ export const main = async () => {
             if (once) {
                 watchRef.on('ready', () => watchRef.close());
             }
+
         });
     };
 
@@ -77,3 +86,4 @@ export const main = async () => {
         });
     }
 }
+

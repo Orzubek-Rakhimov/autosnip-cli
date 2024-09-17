@@ -1,6 +1,5 @@
-import chalk from "chalk";
 import { loadTemplate, readFile } from "./file";
-import { DefaultSnippets, ProjectType } from "../constants/index";
+import { ProjectType } from "../constants/index";
 import path from "path";
 import Logger from "./logger";
 import { ParsedTemplates } from "../parsedTemplates";

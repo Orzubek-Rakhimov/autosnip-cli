@@ -1,8 +1,9 @@
 import path from 'path';
-import { createFile, readFile } from './file';
+import { createFile, isFileEmpty } from './file';
 import { ProjectType } from '../constants/index';
 import { checkProjectType, compile, toCamelCase } from './helpers';
 import Logger from './logger';
+import { knownFiles } from '../main';
 
 
 /**
@@ -16,6 +17,7 @@ export const createSnippet = async (filePath: string, templateContent: string): 
         const componentName = await getComponentName(filePath);
         const snippet = compile(templateContent, { name: componentName });
         await writeSnippetToFile(filePath, snippet);
+        knownFiles.add(filePath);
     } catch (error) {
         Logger.errorAndExit(error, `Error creating snippet for ${filePath}`);
     }
@@ -46,8 +48,7 @@ const getComponentName = async (filePath: string): Promise<string> => {
  * @returns {Promise<void>}
  */
 const writeSnippetToFile = async (filePath: string, snippet: string): Promise<void> => {
-    const fileContent = await readFile(filePath);
-    if (fileContent.trim() === '') {
+    if (await isFileEmpty(filePath)) {
         await createFile(filePath, snippet);
         Logger.info(`Snippet created for ${path.basename(filePath)}`);
     } else {

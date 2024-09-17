@@ -17,6 +17,8 @@ program
   .option('-i, --index <indexFile>', 'Create a specified index file for default exports')
   .option('--snippet-depth <depth...>', 'Depth to create snippets', (value: string, prev: number[] | undefined) => parseDepth(value, prev, false))
   .option('--index-depth <depth...>', 'Depth to create index files', (value: string, prev: number[] | undefined) => parseDepth(value, prev, true, '--index-depth'))
+  .option('-s, --style [type]', 'Create a style file with the snippet. [type] can be "css", "scss", "sass", "less", "stylus", optionally prefixed with "module-" for CSS modules (e.g., "module-scss")')
+  .option('--remove-style', 'Remove the associated style file when the component file is deleted')
   .allowUnknownOption(false)
   .allowExcessArguments(false)
   .showHelpAfterError()

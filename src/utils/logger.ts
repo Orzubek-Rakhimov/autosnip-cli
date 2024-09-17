@@ -50,7 +50,7 @@ class Logger {
    * @param {number} [exitCode=1] - The exit code to use when exiting.
    * @returns {void}
    */
-  static errorAndExit(error: unknown, message: string, exitCode: number = 1) {
+  static errorAndExit(error: unknown, message: string, exitCode: number = 1): void {
     if (error instanceof Error) {
       this.error(`${message}: ${error.message}`);
     } else {
