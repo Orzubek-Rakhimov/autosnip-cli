@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.1-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
+[![Version](https://img.shields.io/badge/version-0.2.2-brightgreen.svg)](https://github.com/Orzubek-Rakhimov/autosnip-cli)
 
 Are you tired of manually creating React snippets and managing index files? Look no further! AutoSnip CLI is here to save you time and effort. AutoSnip CLI is a powerful tool for automatically creating React , React Native and Next.js snippets and managing index files in your project.
 
@@ -132,6 +132,44 @@ This command will create a style file `{{ name }}.module.scss` when the snippet 
 ```bash
 autosnip-cli -d ./src -t TRAFC -w -i notindex.ts --snippet-depth 1 --index-depth 1 -s module-scss --remove-style
 ```
+In react-native project style file will not created or removed because react-native not supported style file or module-style, instead StyleSheet is used and just -s option is enough for react-native project to add StyleSheet in the snippet, other style options are just ignored.
+
+Instead of this:
+```tsx
+import { Text, View } from 'react-native';
+
+interface {{ name }}Props {}
+
+const {{ name }} = ({}: {{ name }}Props) => {
+  return (
+    <View>
+      <Text>{{ name }}</Text>
+    </View>
+  );
+};
+
+export default {{ name }};
+```
+This used:
+
+```tsx
+import { Text, View , StyleSheet } from 'react-native';
+
+interface {{ name }}Props {}
+
+const {{ name }} = ({}: {{ name }}Props) => {
+  return (
+    <View>
+      <Text>{{ name }}</Text>
+    </View>
+  );
+};
+
+export default {{ name }};
+
+const styles = StyleSheet.create({ /* Add your styles here */ });
+```
+
 
 ## Contributing
 

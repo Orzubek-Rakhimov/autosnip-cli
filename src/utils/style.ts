@@ -3,7 +3,8 @@ import { createFile, removeFile } from "./file";
 import { SupportedStyles, SupportedStylesExtensions } from "../types";
 import Logger from "./logger";
 import { knownFiles } from "../main";
-import { SupportedStyles as SupportedStylesConstants } from "../constants";
+import { ProjectType, SupportedStyles as SupportedStylesConstants } from "../constants";
+import { checkProjectType } from "./helpers";
 
 
 /**
@@ -58,26 +59,37 @@ export const createStyleFile = async (filePath: string, ext: SupportedStylesExte
 
 
 /**
- * Add a style import to the content of a file
- * @param {string} content - The content of the file
- * @param {string} styleFilePath - The path to the style file
- * @returns {string} - The content with the style import added
+ * Add the style import to the content
+ * @param {string} content - The content to add the style import to
+ * @param {string} styleFilePath - The file path to the style file
+ * @param {SupportedStylesExtensions} ext - The extension of the style file
+ * @returns {Promise<string>} - The content with the style import added
  */
-export const addStyleImportToContent = (content: string, styleFilePath: string): string => {
-    const importStatement = `import './${path.basename(styleFilePath)}';`;
+export const addStyleImportToContent = async (content: string, styleFilePath: string, ext: SupportedStylesExtensions): Promise<string> => {
     const lines = content.split('\n');
-    let lastImportIndex = -1;
+    const isReactNative = (await checkProjectType()) === ProjectType.REACT_NATIVE;
 
-    for (let i = 0; i < lines.length; i++) {
-        if (lines[i]?.trim().startsWith('import ')) {
-            lastImportIndex = i;
+    if (isReactNative) {
+        const reactNativeImport = lines.find(line => /^\s*import\s+{[^}]*}\s+from\s+['"]react-native['"];?\s*$/.test(line));
+
+        if (reactNativeImport) {
+            if (!reactNativeImport.includes('StyleSheet')) {
+                lines[lines.indexOf(reactNativeImport)] = reactNativeImport.replace(/}\s*from/, ', StyleSheet } from');
+            }
+        } else {
+            lines.unshift('import { StyleSheet } from \'react-native\';');
         }
-    }
 
-    if (lastImportIndex !== -1) {
-        lines.splice(lastImportIndex + 1, 0, importStatement);
+        if (!lines.some(line => line.includes('StyleSheet.create'))) {
+            lines.push('\nconst styles = StyleSheet.create({ /* Add your styles here */ });');
+        }
     } else {
-        lines.unshift(importStatement);
+        const importStatement = ext.startsWith('.module.')
+            ? `import styles from './${path.basename(styleFilePath)}';`
+            : `import './${path.basename(styleFilePath)}';`;
+
+        const lastImportIndex = lines.findLastIndex(line => line.trim().startsWith('import '));
+        lastImportIndex !== -1 ? lines.splice(lastImportIndex + 1, 0, importStatement) : lines.unshift(importStatement);
     }
 
     return lines.join('\n');
@@ -93,10 +105,13 @@ export const addStyleImportToContent = (content: string, styleFilePath: string):
 
 export const proccessCreateStyleFile = async (filePath: string, ext: SupportedStylesExtensions, content: string): Promise<string> => {
     try {
+        if ((await checkProjectType()) === ProjectType.REACT_NATIVE) {
+            return await addStyleImportToContent(content, filePath, ext);
+        }
         const styleFilePath = await createStyleFile(filePath, ext);
         knownFiles.add(styleFilePath);
         Logger.info(`Created style file for ${filePath}`);
-        return addStyleImportToContent(content, styleFilePath);
+        return await addStyleImportToContent(content, styleFilePath, ext);
     } catch (error) {
         Logger.errorAndExit(error, `Error processing style file for ${filePath}`);
         throw new Error('Unreachable');
@@ -108,7 +123,7 @@ export const proccessCreateStyleFile = async (filePath: string, ext: SupportedSt
  * @param {string} filePath - The file path to remove the style file for
  * @returns {Promise<void>}
  */
-export const proccessRemoveStyleFile = async (filePath: string) => {
+export const proccessRemoveStyleFile = async (filePath: string): Promise<void> => {
     try {
         await removeFile(filePath);
         knownFiles.delete(filePath);

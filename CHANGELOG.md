@@ -1,5 +1,11 @@
 # autosnip-cli
 
+## 0.2.2
+
+### Patch Changes
+
+- Refactor style file handling for React Native and not React Native projects
+
 ## 0.2.1
 
 ### Patch Changes

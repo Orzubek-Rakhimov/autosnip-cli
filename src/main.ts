@@ -1,12 +1,12 @@
 import path from "path";
 import { program } from "./command";
 import { watch } from "chokidar";
-import { getIndexFileName, getTemplateContent } from "./utils/helpers";
+import { checkProjectType, getIndexFileName, getTemplateContent } from "./utils/helpers";
 import { createSnippet } from "./utils/snippet";
 import { removeFromIndexFile, updateIndexFile } from "./utils";
 import { isFileEmpty, validateDirectory } from "./utils/file";
 import Logger from "./utils/logger";
-import { DEFAULT_INDEX_DEPTH, DEFAULT_SNIPPET_DEPTH } from "./constants/index";
+import { DEFAULT_INDEX_DEPTH, DEFAULT_SNIPPET_DEPTH, ProjectType } from "./constants/index";
 import { DirDepthPair, SupportedStylesExtensions } from "./types";
 import { getStylePath, getSytyleExt, proccessCreateStyleFile, proccessRemoveStyleFile } from "./utils/style";
 
@@ -47,7 +47,8 @@ export const main = async () => {
                             await removeFromIndexFile(filePath, indexFileName);
                             knownFiles.delete(filePath);
                             const stylePath = getStylePath(filePath, styleExt as SupportedStylesExtensions);
-                            if (options.removeStyle && options.style && knownFiles.has(stylePath)) {
+                            const isReactNative = (await checkProjectType()) === ProjectType.REACT_NATIVE;
+                            if (options.removeStyle && options.style && knownFiles.has(stylePath) && !isReactNative) {
                                 await proccessRemoveStyleFile(stylePath);
                             }
                         }
